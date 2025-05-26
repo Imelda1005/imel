@@ -135,7 +135,28 @@
     <div class="nav-item active">Detail Sidang</div>
     <div class="nav-item">Evaluasi</div>
     <div class="nav-item">Nilai Akhir</div>
+
   </div>
+
+
+  <div class="bodyContainer">
+    <h2 class="fw-bold">Detail Sidang - Pemrograman 2</h2>
+    <h5 class="mt-3 mb-4">Catatan Perbaikan <span class="statusBadge">Status Revisi: Disetujui</span></h5>
+
+    <!-- Catatan 1 -->
+    <div class="card-note">
+      <h6>Dr. Rida Indah Fariani, S.Kom, M.Kom – Pembimbing</h6>
+      <p>Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik, termasuk margin, jenis huruf, ukuran font, dan penomoran halaman. Periksa kembali penggunaan bahasa. Hindari kesalahan ejaan, tanda baca, dan kalimat yang kurang efektif. Gunakan bahasa ilmiah yang baik dan konsisten.</p>
+      <div class="approved-badge">Telah Menyetujui</div>
+    </div>
+
+    <!-- Catatan 2 -->
+    <div class="card-note">
+      <h6>Dr. Rida Indah Fariani, S.Kom, M.Kom – Pembimbing</h6>
+      <p>Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik, termasuk margin, jenis huruf, ukuran font, dan penomoran halaman. Periksa kembali penggunaan bahasa. Hindari kesalahan ejaan, tanda baca, dan kalimat yang kurang efektif. Gunakan bahasa ilmiah yang baik dan konsisten.</p>
+      <div class="approved-badge">Telah Menyetujui</div>
+    </div>
+
 
   <div class="bodyContainer">
     <h2><strong>Detail Sidang – Pemrograman 2</strong></h2>
@@ -149,6 +170,8 @@
       </p>
       <div class="approved-badge">Telah Menyetujui</div>
     </div>
+
+    
 
     <!-- Dokumen Revisi -->
     <div class="revision-box">
