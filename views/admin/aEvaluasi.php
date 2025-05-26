@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Detail Sidang</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
@@ -167,5 +168,135 @@
   </div>
 
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+
+    .revision-box {
+      border: 2px solid #3498db;
+      border-radius: 12px;
+      padding: 20px;
+      background-color: #f0f0f0;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .img-slot {
+      background-color: #e5e5e5;
+      border-radius: 15px;
+      padding: 40px;
+      text-align: center;
+      min-height: 100px;
+    }
+
+    .img-slot i {
+      color: gray;
+      font-size: 36px;
+    }
+
+    .download-btn {
+      float: right;
+      margin-top: 10px;
+      background-color: #5a67d8;
+      color: white;
+      padding: 6px 16px;
+      border-radius: 8px;
+      border: none;
+      text-decoration: none;
+    }
+
+    .download-btn:hover {
+      background-color: #434190;
+    }
+
+    .btn-outline-secondary {
+      background: transparent;
+      border: 1px solid #aaa;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .btn-outline-secondary:hover {
+      background-color: #ddd;
+    }
+
+    .btn-back {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid #5a67d8;
+      color: #5a67d8;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .btn-back i {
+      margin-right: 5px;
+    }
+
+    .btn-back:hover {
+      background-color: #e0e7ff;
+    }
+
+    #fileName {
+      font-size: 14px;
+      color: #555;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="revision-box">
+    <p><strong>Dokumen Revisi</strong></p>
+
+    <div id="previewArea" class="img-slot mb-2">
+      <div id="uploadPlaceholder">
+        <i class="fas fa-upload fa-2x"></i>
+        <p class="text-muted">Unggah berkas revisi dengan format pdf, docx, pptx, dan zip</p>
+      </div>
+    </div>
+
+    <p id="fileName" class="text-muted"></p>
+
+    <input type="file" id="fileInput" style="display:none" accept=".pdf,.docx,.pptx,.zip" />
+    <button class="btn-outline-secondary" onclick="document.getElementById('fileInput').click()">Pilih Dokumen</button>
+
+    <a id="downloadBtn" href="#" class="download-btn" style="display:none" download>Download</a>
+  </div>
+
+  <!-- Tombol Kembali -->
+  <a href="#" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
+
+  <script>
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        // Tampilkan nama file
+        document.getElementById('fileName').innerText = file.name;
+
+        // Ganti tampilan preview
+        document.getElementById('previewArea').innerHTML = `
+          <div style="font-size: 50px; color: gray;">
+            <i class="fas fa-file-alt"></i>
+          </div>
+        `;
+
+        // Atur tombol download
+        const downloadLink = document.getElementById('downloadBtn');
+        downloadLink.href = URL.createObjectURL(file);
+        downloadLink.download = file.name;
+        downloadLink.style.display = 'inline-block';
+      }
+    });
+  </script>
+  
 </body>
 </html>
