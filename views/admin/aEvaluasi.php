@@ -169,7 +169,7 @@
 
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-  <style>
+   <style>
     body {
       font-family: sans-serif;
       margin: 20px;
@@ -193,9 +193,9 @@
       min-height: 100px;
     }
 
-    .img-slot i {
-      color: gray;
-      font-size: 36px;
+    .img-slot img {
+      max-height: 100px;
+      margin-bottom: 10px;
     }
 
     .download-btn {
@@ -250,6 +250,10 @@
       color: #555;
       margin-top: 5px;
     }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -257,19 +261,20 @@
   <div class="revision-box">
     <p><strong>Dokumen Revisi</strong></p>
 
+    <!-- AREA PREVIEW -->
     <div id="previewArea" class="img-slot mb-2">
-      <div id="uploadPlaceholder">
-        <i class="fas fa-upload fa-2x"></i>
-        <p class="text-muted">Unggah berkas revisi dengan format pdf, docx, pptx, dan zip</p>
-      </div>
+      <!-- Default: Gambar upload -->
+      <img src="645a9712-937e-45c2-a5a8-3bac0c6d84de.png" alt="Upload icon" />
+      <p class="text-muted">Unggah berkas revisi dengan format pdf, docx, pptx, dan zip</p>
     </div>
 
     <p id="fileName" class="text-muted"></p>
 
+    <!-- Input dan tombol -->
     <input type="file" id="fileInput" style="display:none" accept=".pdf,.docx,.pptx,.zip" />
     <button class="btn-outline-secondary" onclick="document.getElementById('fileInput').click()">Pilih Dokumen</button>
 
-    <a id="downloadBtn" href="#" class="download-btn" style="display:none" download>Download</a>
+    <a id="downloadBtn" href="#" class="download-btn hidden" download>Download</a>
   </div>
 
   <!-- Tombol Kembali -->
@@ -279,24 +284,21 @@
     document.getElementById('fileInput').addEventListener('change', function(event) {
       const file = event.target.files[0];
       if (file) {
+        // Ganti preview jadi tampilan file berhasil diupload
+        document.getElementById('previewArea').innerHTML = `
+          <img src="0ddf2c56-18fe-4319-b5d8-a3db621f83dd.png" alt="File icon" />
+        `;
+
         // Tampilkan nama file
         document.getElementById('fileName').innerText = file.name;
-
-        // Ganti tampilan preview
-        document.getElementById('previewArea').innerHTML = `
-          <div style="font-size: 50px; color: gray;">
-            <i class="fas fa-file-alt"></i>
-          </div>
-        `;
 
         // Atur tombol download
         const downloadLink = document.getElementById('downloadBtn');
         downloadLink.href = URL.createObjectURL(file);
         downloadLink.download = file.name;
-        downloadLink.style.display = 'inline-block';
+        downloadLink.classList.remove("hidden");
       }
     });
   </script>
-  
 </body>
 </html>
