@@ -7,8 +7,8 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
-  <link rel ="stylesheet" href="aEval.css>
-    <script type="text/javascript" src="aEval.js"></script>
+  <!-- <link rel ="stylesheet" href="aEval.css>
+    <script type="text/javascript" src="aEval.js"></script> -->
   <style>
     body {
       margin: 0;
@@ -121,6 +121,54 @@
         margin-left: 0;
         padding: 20px;
       }
+      .card-note {
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .card-note:hover {
+      background-color: #f9f9f9;
+    }
+
+    .approved-badge {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 6px 12px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .popup-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+    }
     }
   </style>
 </head>
@@ -156,6 +204,26 @@
       <p>Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik, termasuk margin, jenis huruf, ukuran font, dan penomoran halaman. Periksa kembali penggunaan bahasa. Hindari kesalahan ejaan, tanda baca, dan kalimat yang kurang efektif. Gunakan bahasa ilmiah yang baik dan konsisten.</p>
       <div class="approved-badge">Telah Menyetujui</div>
     </div>
+
+    <script>
+    function showPopup(cardElement) {
+      const popup = document.getElementById('popup');
+      const popupContent = document.getElementById('popup-content');
+
+      // Ambil isi dari card yang diklik
+      const content = cardElement.innerHTML;
+
+      // Masukkan isi card ke dalam popup (selain tombol close)
+      popupContent.innerHTML = '<span class="close-btn" onclick="closePopup()">&times;</span>' + content;
+
+      // Tampilkan popup
+      popup.style.display = 'flex';
+    }
+
+    function closePopup() {
+      document.getElementById('popup').style.display = 'none';
+    }
+  </script>
 
     <!-- Dokumen Revisi -->
     <div class="revision-box mt-4">
