@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Detail Sidang</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
-  <!-- <link rel ="stylesheet" href="aEval.css>
-    <script type="text/javascript" src="aEval.js"></script> -->
   <style>
     body {
       margin: 0;
@@ -28,7 +24,6 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      z-index: 1000;
     }
 
     .sideNav img {
@@ -74,6 +69,11 @@
       border-radius: 15px;
       box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
       margin-bottom: 20px;
+      cursor: pointer;
+    }
+
+    .card-note:hover {
+      background-color: #f1f1f1;
     }
 
     .card-note h6 {
@@ -93,7 +93,7 @@
       margin-top: 10px;
     }
 
-    .revision-box {
+    .img-slot {
       background-color: #efefef;
       padding: 30px;
       border-radius: 15px;
@@ -101,74 +101,74 @@
     }
 
     .download-btn {
-      margin-top: 15px;
+      background-color: #5a67d8;
+      color: white;
+      padding: 6px 16px;
+      border-radius: 8px;
+      border: none;
+      text-decoration: none;
+    }
+
+    .download-btn:hover {
+      background-color: #434190;
     }
 
     .btn-back {
       margin-top: 30px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid #5a67d8;
+      color: #5a67d8;
+      text-decoration: none;
+      font-weight: bold;
     }
 
-    @media (max-width: 768px) {
-      .sideNav {
-        position: relative;
-        width: 100%;
-        height: auto;
-        flex-direction: row;
-        justify-content: space-around;
-      }
-
-      .bodyContainer {
-        margin-left: 0;
-        padding: 20px;
-      }
-      .card-note {
-      border: 1px solid #ccc;
-      padding: 15px;
-      border-radius: 10px;
-      margin: 10px;
-      cursor: pointer;
-      transition: 0.3s;
+    .btn-back:hover {
+      background-color: #e0e7ff;
     }
 
-    .card-note:hover {
-      background-color: #f9f9f9;
-    }
-
-    .approved-badge {
-      background-color: #d4edda;
-      color: #155724;
-      padding: 6px 12px;
-      border-radius: 6px;
-      display: inline-block;
-      margin-top: 10px;
-    }
-
+    /* POPUP STYLING */
     .popup-overlay {
       display: none;
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.5);
       justify-content: center;
       align-items: center;
       z-index: 999;
     }
 
     .popup-content {
-      background: #fff;
-      padding: 20px;
+      background: white;
+      padding: 25px;
       border-radius: 12px;
       max-width: 500px;
       width: 90%;
       position: relative;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .popup-content h5 {
+      margin-top: 0;
+      font-weight: 600;
+    }
+
+    .popup-content p {
+      font-size: 15px;
     }
 
     .close-btn {
       position: absolute;
-      top: 10px; right: 15px;
+      top: 10px;
+      right: 15px;
       font-size: 20px;
       cursor: pointer;
+      color: #888;
     }
+
+    .close-btn:hover {
+      color: #000;
     }
   </style>
 </head>
@@ -184,188 +184,64 @@
     <h2 class="fw-bold">Detail Sidang - Pemrograman 2</h2>
     <h5 class="mt-3 mb-4">Catatan Perbaikan <span class="statusBadge">Status Revisi: Disetujui</span></h5>
 
-    <!-- Catatan 1 -->
-    <div class="card-note" id ="catatan1">
+    <!-- CATATAN -->
+    <div class="card-note clickable-note" data-id="1">
       <h6>Dr. Rida Indah Fariani, S.Kom, M.Kom – Pembimbing</h6>
-      <p>Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik, termasuk margin, jenis huruf, ukuran font, dan penomoran halaman. Periksa kembali penggunaan bahasa. Hindari kesalahan ejaan, tanda baca, dan kalimat yang kurang efektif. Gunakan bahasa ilmiah yang baik dan konsisten.</p>
+      <p>Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik...</p>
       <div class="approved-badge">Telah Menyetujui</div>
     </div>
 
-    <!-- Catatan 2 -->
-    <div class="card-note">
+    <div class="card-note clickable-note" data-id="2">
       <h6>Dr. Rida Indah Fariani, S.Kom, M.Kom – Pembimbing</h6>
-      <p>Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik, termasuk margin, jenis huruf, ukuran font, dan penomoran halaman. Periksa kembali penggunaan bahasa. Hindari kesalahan ejaan, tanda baca, dan kalimat yang kurang efektif. Gunakan bahasa ilmiah yang baik dan konsisten.</p>
+      <p>Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik...</p>
       <div class="approved-badge">Telah Menyetujui</div>
     </div>
 
-    <!-- Catatan 3 -->
-    <div class="card-note">
+    <div class="card-note clickable-note" data-id="3">
       <h6>Dr. Rida Indah Fariani, S.Kom, M.Kom – Pembimbing</h6>
-      <p>Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik, termasuk margin, jenis huruf, ukuran font, dan penomoran halaman. Periksa kembali penggunaan bahasa. Hindari kesalahan ejaan, tanda baca, dan kalimat yang kurang efektif. Gunakan bahasa ilmiah yang baik dan konsisten.</p>
+      <p>Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik...</p>
       <div class="approved-badge">Telah Menyetujui</div>
     </div>
-
-    <script>
-    function showPopup(cardElement) {
-      const popup = document.getElementById('popup');
-      const popupContent = document.getElementById('popup-content');
-
-      // Ambil isi dari card yang diklik
-      const content = cardElement.innerHTML;
-
-      // Masukkan isi card ke dalam popup (selain tombol close)
-      popupContent.innerHTML = '<span class="close-btn" onclick="closePopup()">&times;</span>' + content;
-
-      // Tampilkan popup
-      popup.style.display = 'flex';
-    }
-
-    function closePopup() {
-      document.getElementById('popup').style.display = 'none';
-    }
-  </script>
 
     <!-- Dokumen Revisi -->
-    <div class="revision-box mt-4">
+    <div class="img-slot mb-2">
       <p><strong>Dokumen Revisi</strong></p>
-      <div class="img-slot mb-2">=</div>
+      <i class="fas fa-upload fa-2x"></i>
       <p>laporan-revisi_ke1-1.pdf</p>
-      <a href="#" class="btn btn-primary download-btn">Download</a>
+      <a href="#" class="download-btn" download>Download</a>
     </div>
 
     <!-- Tombol Kembali -->
-    <a href="#" class="btn btn-outline-primary btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
+    <a href="#" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
   </div>
 
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 20px;
-      background-color: #f9f9f9;
-    }
-
-    .revision-box {
-      border: 2px solid #3498db;
-      border-radius: 12px;
-      padding: 20px;
-      background-color: #f0f0f0;
-      max-width: 600px;
-      margin: auto;
-    }
-
-    .img-slot {
-      background-color: #e5e5e5;
-      border-radius: 15px;
-      padding: 40px;
-      text-align: center;
-      min-height: 100px;
-    }
-
-    .img-slot i {
-      color: gray;
-      font-size: 36px;
-    }
-
-    .download-btn {
-      float: right;
-      margin-top: 10px;
-      background-color: #5a67d8;
-      color: white;
-      padding: 6px 16px;
-      border-radius: 8px;
-      border: none;
-      text-decoration: none;
-    }
-
-    .download-btn:hover {
-      background-color: #434190;
-    }
-
-    .btn-outline-secondary {
-      background: transparent;
-      border: 1px solid #aaa;
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    .btn-outline-secondary:hover {
-      background-color: #ddd;
-    }
-
-    .btn-back {
-      display: inline-block;
-      margin-top: 30px;
-      padding: 8px 14px;
-      border-radius: 8px;
-      border: 1px solid #5a67d8;
-      color: #5a67d8;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .btn-back i {
-      margin-right: 5px;
-    }
-
-    .btn-back:hover {
-      background-color: #e0e7ff;
-    }
-
-    #fileName {
-      font-size: 14px;
-      color: #555;
-      margin-top: 5px;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="revision-box">
-    <p><strong>Dokumen Revisi</strong></p>
-
-    <div id="previewArea" class="img-slot mb-2">
-      <div id="uploadPlaceholder">
-        <i class="fas fa-upload fa-2x"></i>
-        <p class="text-muted">Unggah berkas revisi dengan format pdf, docx, pptx, dan zip</p>
-      </div>
+  <!-- POPUP -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePopup()">&times;</span>
+      <h5 id="popupTitle">Detail Catatan</h5>
+      <p id="popupText">Isi catatan akan muncul di sini</p>
     </div>
-
-    <p id="fileName" class="text-muted"></p>
-
-    <input type="file" id="fileInput" style="display:none" accept=".pdf,.docx,.pptx,.zip" />
-    <button class="btn-outline-secondary" onclick="document.getElementById('fileInput').click()">Pilih Dokumen</button>
-
-    <a id="downloadBtn" href="#" class="download-btn" style="display:none" download>Download</a>
   </div>
-
-  <!-- Tombol Kembali -->
-  <a href="#" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
 
   <script>
-    document.getElementById('fileInput').addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (file) {
-        // Tampilkan nama file
-        document.getElementById('fileName').innerText = file.name;
+    const catatanList = {
+      1: "Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik, termasuk margin, jenis huruf, ukuran font, dan penomoran halaman. Periksa kembali penggunaan bahasa. Hindari kesalahan ejaan, tanda baca, dan kalimat yang kurang efektif. Gunakan bahasa ilmiah yang baik dan konsisten.",
+      2: "Catatan kedua ini sama pentingnya, pastikan kamu memperhatikan detail kecil dari format penulisan dan kesesuaian isi dengan topik.",
+      3: "Catatan ketiga menekankan pentingnya struktur logika yang konsisten dan penggunaan kutipan atau referensi yang sesuai."
+    };
 
-        // Ganti tampilan preview
-        document.getElementById('previewArea').innerHTML = `
-          <div style="font-size: 50px; color: gray;">
-            <i class="fas fa-file-alt"></i>
-          </div>
-        `;
-
-        // Atur tombol download
-        const downloadLink = document.getElementById('downloadBtn');
-        downloadLink.href = URL.createObjectURL(file);
-        downloadLink.download = file.name;
-        downloadLink.style.display = 'inline-block';
-      }
+    document.querySelectorAll('.clickable-note').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.getAttribute('data-id');
+        document.getElementById('popupText').innerText = catatanList[id];
+        document.getElementById('popupOverlay').style.display = 'flex';
+      });
     });
+
+    function closePopup() {
+      document.getElementById('popupOverlay').style.display = 'none';
+    }
   </script>
 </body>
 </html>
