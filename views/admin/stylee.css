@@ -101,7 +101,7 @@ body {
 }
 
 .card-comment {
-  background-color: #e96fc2;
+  background-color: #ebebeb !important;
   padding: 20px;
   border-radius: 15px;
   margin-bottom: 20px;
@@ -147,12 +147,20 @@ body {
 
 /* Card utama untuk bagian revisi */
 .revision-card {
-  background-color: white;
+  background-color: #ebebeb;
   border-radius: 1.5rem; /* 24px */
   padding: 2rem; /* 32px */
   border: 1px solid #e9ecef;
+  height:350px;
 }
 
+
+.revision-cardUp{
+  background-color: #E5E5E5;
+  border-radius: 1.5rem; /* 24px */
+  padding: 2rem; /* 32px */
+  margin:15px;
+}
 /* Area upload yang baru */
 .upload-area-v2 {
   background-color: #f8f9fa;

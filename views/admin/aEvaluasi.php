@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Detail Sidang</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="stylee.css">
+  <link rel="stylesheet" href="stylee.css?v=<?= time() ?>">
 <script src="js.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -122,33 +122,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 <div class="revision-card shadow-sm">
   <h5 class="fw-bold text-primary">Dokumen Revisi</h5>
-  <p class="text-center text-muted small mt-2"><b>Dokumen_Revisi_SidangSemester_XX</b></p>
+  <div class="revision-cardUp">
+  <p class="text-center text-muted small mt-2" ><b>Dokumen_Revisi_SidangSemester_XX</b></p>
 
   <div class="text-center mt-3">
-    <a href="#" class="btn btn-outline-primary" target="_blank">
+    
+    <a href="#" class="btn btn primary" target="_blank">
        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="#8d99ae" class="bi bi-file-earmark-text-fill" viewBox="0 0 16 16"><path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.707 0H9.293zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM4.5 9a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1h-7zM4.5 10.5a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1h-7zM4.5 12a.5.5 0 0 1 0-1h4a.5.5 0 0 1 0 1h-4z"/></svg>    
 
     </a>
-  </div>
+
+
 </div>
-            <input type="file" id="fileInput" name="fileInput" accept=".pdf,.docx,.pptx,.zip" hidden />
-            <p class="text-center text-muted small mt-2" id="upload-prompt-text">Unggah berkas revisi dengan format pdf, docx, pptx, dan zip</p> <br/>
 
-            <p class="text-center text-muted small mt-2" id="upload-prompt-text"><b>Dokumen_Revisi_SidangSemester_XX</b></p>
-
-            <div class="text-center mt-3"><p id="fileNameDisplay" class="fw-bold mb-0"></p></div>
-            <div class="d-flex justify-content-end mt-4">
+  </div>
+    <p class="text-center text-muted small mt-2" id="upload-prompt-text">Unggah berkas revisi dengan format pdf, docx, pptx, dan zip</p> <br/>
+      <div class="d-flex justify-content-end mt-4">
                 <button type="submit" class="btn-kirim" id="submitBtn" disabled>unggah</button>
             </div>
-        </form>
-    </div>
 
-    <div class="mt-4">
+</div>
+            <input type="file" id="fileInput" name="fileInput" accept=".pdf,.docx,.pptx,.zip" hidden />
+          
+            
+
+            <div class="text-center mt-3"><p id="fileNameDisplay" class="fw-bold mb-0"></p></div>
+          
+
+             <div class="mt-4">
         <button type="button" id="btnKembali" class="btn btn-custom-primary">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg>
             Kembali
         </button>
     </div>
+
+    
+        </form>
+    </div>
+
+  
 
     <div class="modal fade" id="modalDetail" tabindex="-1" aria-labelledby="modalDetailLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
