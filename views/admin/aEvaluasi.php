@@ -1,247 +1,195 @@
+<?php
+// Langkah 1: Mulai session di baris paling pertama
+session_start();
+
+// Langkah 3: Cek apakah ada pesan dari proses sebelumnya, lalu hapus.
+$pesan = '';
+if (isset($_SESSION['pesan'])) {
+    $pesan = $_SESSION['pesan'];
+    unset($_SESSION['pesan']); // Hapus pesan dari session agar tidak muncul lagi saat di-refresh
+}
+
+// Cek apakah form telah disubmit menggunakan metode POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    // Cek apakah ada file yang di-upload melalui input bernama 'fileInput'
+    if (isset($_FILES["fileInput"]) && $_FILES["fileInput"]["error"] == 0) {
+        
+        $folder_target = "uploads/";
+        if (!file_exists($folder_target)) {
+            mkdir($folder_target, 0777, true);
+        }
+
+        $file_asli = basename($_FILES["fileInput"]["name"]);
+        $ekstensi_file = strtolower(pathinfo($file_asli, PATHINFO_EXTENSION));
+        $file_unik = uniqid('revisi_', true) . '.' . $ekstensi_file;
+        $path_target = $folder_target . $file_unik;
+        
+        $ekstensi_diizinkan = array("pdf", "docx", "pptx", "zip");
+        if (!in_array($ekstensi_file, $ekstensi_diizinkan)) {
+            // Untuk pesan error, kita langsung tampilkan saja tanpa redirect
+            $pesan = "Error: Format file tidak diizinkan. Hanya .pdf, .docx, .pptx, dan .zip yang boleh diunggah.";
+        }
+        
+        elseif ($_FILES["fileInput"]["size"] > 5242880) {
+            $pesan = "Error: Ukuran file terlalu besar. Maksimal 5 MB.";
+        }
+        
+        else {
+            if (move_uploaded_file($_FILES["fileInput"]["tmp_name"], $path_target)) {
+                
+                // Langkah 2: Jika SUKSES, simpan pesan ke session dan lakukan redirect
+                $_SESSION['pesan'] = "Sukses: File ". htmlspecialchars($file_asli) . " berhasil diunggah.";
+                header("Location: index.php"); // Perintahkan browser untuk redirect
+                exit(); // Hentikan eksekusi script setelah redirect
+
+            } else {
+                $pesan = "Error: Maaf, terjadi kesalahan saat memindahkan file.";
+            }
+        }
+
+    } elseif (isset($_FILES["fileInput"])) {
+        switch ($_FILES["fileInput"]["error"]) {
+            case UPLOAD_ERR_NO_FILE:
+                $pesan = "Error: Tidak ada file yang dipilih.";
+                break;
+            default:
+                $pesan = "Error: Terjadi kesalahan saat mengunggah.";
+                break;
+        }
+    }
+}
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Detail Sidang</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background-color: #f9f9f9;
-    }
-
-    .sideNav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 220px;
-      height: 100vh;
-      background-color: #4538db;
-      padding: 30px 15px;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .sideNav img {
-      width: 100%;
-      max-width: 120px;
-      margin-bottom: 30px;
-    }
-
-    .nav-item {
-      padding: 12px 20px;
-      width: 100%;
-      border-radius: 20px;
-      margin-bottom: 10px;
-      text-align: left;
-      font-weight: 500;
-      cursor: pointer;
-    }
-
-    .nav-item.active {
-      background-color: white;
-      color: #4538db;
-      font-weight: 600;
-    }
-
-    .bodyContainer {
-      margin-left: 220px;
-      padding: 40px;
-    }
-
-    .statusBadge {
-      background-color: #d1f1db;
-      color: #2e7d32;
-      font-weight: 500;
-      padding: 6px 12px;
-      border-radius: 20px;
-      display: inline-block;
-      font-size: 0.9rem;
-    }
-
-    .card-note {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
-      margin-bottom: 20px;
-      cursor: pointer;
-    }
-
-    .card-note:hover {
-      background-color: #f1f1f1;
-    }
-
-    .card-note h6 {
-      font-weight: 600;
-      margin-bottom: 10px;
-      color: #333;
-    }
-
-    .approved-badge {
-      color: #28a745;
-      background-color: #e6f4ec;
-      font-size: 0.8rem;
-      padding: 5px 10px;
-      border-radius: 20px;
-      display: inline-block;
-      font-weight: 500;
-      margin-top: 10px;
-    }
-
-    .img-slot {
-      background-color: #efefef;
-      padding: 30px;
-      border-radius: 15px;
-      text-align: center;
-    }
-
-    .download-btn {
-      background-color: #5a67d8;
-      color: white;
-      padding: 6px 16px;
-      border-radius: 8px;
-      border: none;
-      text-decoration: none;
-    }
-
-    .download-btn:hover {
-      background-color: #434190;
-    }
-
-    .btn-back {
-      margin-top: 30px;
-      padding: 8px 14px;
-      border-radius: 8px;
-      border: 1px solid #5a67d8;
-      color: #5a67d8;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .btn-back:hover {
-      background-color: #e0e7ff;
-    }
-
-    /* POPUP STYLING */
-    .popup-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-
-    .popup-content {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      max-width: 500px;
-      width: 90%;
-      position: relative;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-
-    .popup-content h5 {
-      margin-top: 0;
-      font-weight: 600;
-    }
-
-    .popup-content p {
-      font-size: 15px;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      font-size: 20px;
-      cursor: pointer;
-      color: #888;
-    }
-
-    .close-btn:hover {
-      color: #000;
-    }
-  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="stylee.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-  <div class="sideNav">
-    <img src="logo-astratech.png" alt="ASTRAtech Logo" />
-    <div class="nav-item active">Detail Sidang</div>
-    <div class="nav-item">Evaluasi</div>
-    <div class="nav-item">Nilai Akhir</div>
+
+  <div class="sidebar">
+    <h4>ASTRAtech</h4>
+    <a href="#">Detail Sidang</a>
+    <a href="#" class="active">Evaluasi</a>
+    <a href="#">Nilai Akhir</a>
   </div>
 
-  <div class="bodyContainer">
-    <h2 class="fw-bold">Detail Sidang - Pemrograman 2</h2>
-    <h5 class="mt-3 mb-4">Catatan Perbaikan <span class="statusBadge">Status Revisi: Disetujui</span></h5>
+  <div class="main">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2>Detail Sidang - Sistem Pengajuan Sidang</h2>
+        <h5 class="mt-3">Catatan Perbaikan</h5>
+      </div>
+      <span class="badge-custom">Status Revisi : Belum Disetujui</span>
+    </div>
 
-    <!-- CATATAN -->
-    <div class="card-note clickable-note" data-id="1">
+    <!-- <div class="card-comment mt-4" data-bs-toggle="modal" data-bs-target="#modalDetail">
+      <strong>Timotius Victory, S.Kom, M.Kom - Penguji</strong>
+      <p class="mt-2 mb-0 text-truncate-2">
+        Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik...
+      </p>
+    </div> -->
+ 
+    <div class="card-comment mt-4" data-bs-toggle="modal" data-bs-target="#modalDetail">
       <h6>Dr. Rida Indah Fariani, S.Kom, M.Kom – Pembimbing</h6>
-      <p>Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik...</p>
+      <p class="mt-2 mb-0 text-truncate-2">
+        Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik...
+      </p>
       <div class="approved-badge">Telah Menyetujui</div>
     </div>
 
-    <div class="card-note clickable-note" data-id="2">
-      <h6>Dr. Rida Indah Fariani, S.Kom, M.Kom – Pembimbing</h6>
-      <p>Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik...</p>
+
+    <div class="card-comment" data-bs-toggle="modal" data-bs-target="#modalDetail">
+      <strong>Yosep Setiawan, S.Kom, M.Kom - Penguji</strong>
+      <p class="mt-2 mb-0 text-truncate-2">
+        Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik...
+      </p>
       <div class="approved-badge">Telah Menyetujui</div>
     </div>
 
-    <div class="card-note clickable-note" data-id="3">
-      <h6>Dr. Rida Indah Fariani, S.Kom, M.Kom – Pembimbing</h6>
-      <p>Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik...</p>
+        <div class="card-comment" data-bs-toggle="modal" data-bs-target="#modalDetail">
+      <strong>Yosep Setiawan, S.Kom, M.Kom - Penguji</strong>
+      <p class="mt-2 mb-0 text-truncate-2">
+        Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik...
+      </p>
       <div class="approved-badge">Telah Menyetujui</div>
     </div>
 
-    <!-- Dokumen Revisi -->
-    <div class="img-slot mb-2">
-      <p><strong>Dokumen Revisi</strong></p>
-      <i class="fas fa-upload fa-2x"></i>
-      <p>laporan-revisi_ke1-1.pdf</p>
-      <a href="#" class="download-btn" download>Download</a>
+    <div class="revision-card shadow-sm">
+        <h5 class="fw-bold text-primary">Dokumen Revisi</h5>
+        <form id="revisionForm" action="index.php" method="POST" enctype="multipart/form-data">
+            <label for="fileInput" class="upload-area-v2" id="uploadArea">
+                <div id="initial-state">
+                    
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="#ced4da" class="bi bi-file-text-fill" viewBox="0 0 16 16">
+  <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m0 2h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1"/>
+</svg>
+                </div>
+                <div id="selected-state" class="d-none">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="#8d99ae" class="bi bi-file-earmark-text-fill" viewBox="0 0 16 16"><path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.707 0H9.293zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM4.5 9a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1h-7zM4.5 10.5a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1h-7zM4.5 12a.5.5 0 0 1 0-1h4a.5.5 0 0 1 0 1h-4z"/></svg>
+                </div>
+            </label>
+            <input type="file" id="fileInput" name="fileInput" accept=".pdf,.docx,.pptx,.zip" hidden />
+            <p class="text-center text-muted small mt-2" id="upload-prompt-text">Unggah berkas revisi dengan format pdf, docx, pptx, dan zip</p>
+            <div class="text-center mt-3"><p id="fileNameDisplay" class="fw-bold mb-0"></p></div>
+            <div class="d-flex justify-content-end mt-4">
+                <button type="submit" class="btn-kirim" id="submitBtn" disabled>unggah</button>
+            </div>
+        </form>
     </div>
 
-    <!-- Tombol Kembali -->
-    <a href="#" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
-  </div>
-
-  <!-- POPUP -->
-  <div class="popup-overlay" id="popupOverlay">
-    <div class="popup-content">
-      <span class="close-btn" onclick="closePopup()">&times;</span>
-      <h5 id="popupTitle">Detail Catatan</h5>
-      <p id="popupText">Isi catatan akan muncul di sini</p>
+    <div class="mt-4">
+        <button type="button" id="btnKembali" class="btn btn-custom-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg>
+            Kembali
+        </button>
     </div>
-  </div>
 
+    <div class="modal fade" id="modalDetail" tabindex="-1" aria-labelledby="modalDetailLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 p-4">
+          <div class="d-flex justify-content-between align-items-start">
+            <h4 id="modalDetailLabel" class="fw-bold text-primary">Detail Catatan Perbaikan</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+          </div>
+          <div class="modal-body pt-3 pb-2">
+            <p>
+              Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik,
+              termasuk margin, jenis huruf, ukuran font, dan penomoran halaman. Periksa kembali penggunaan bahasa.
+              Hindari kesalahan ejaan, tanda baca, dan kalimat yang kurang efektif. Gunakan bahasa ilmiah yang baku dan konsisten.
+              Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik,
+              termasuk margin, jenis huruf, ukuran font, dan penomoran halaman. Periksa kembali penggunaan bahasa.
+              Hindari kesalahan ejaan, tanda baca, dan kalimat yang kurang efektif. Gunakan bahasa ilmiah yang baku dan konsisten.
+            </p>
+          </div>
+          <div class="modal-footer border-0 justify-content-end">
+            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Tutup</button>
+          </div>
+        </div>
+      </div>
+    </div>
+     </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js.js"></script>
+
+  <?php
+  if (!empty($pesan) && strpos(strtolower($pesan), 'sukses') !== false):
+  ?>
   <script>
-    const catatanList = {
-      1: "Pastikan seluruh bagian dokumen mengikuti format penulisan yang telah ditentukan oleh panduan akademik, termasuk margin, jenis huruf, ukuran font, dan penomoran halaman. Periksa kembali penggunaan bahasa. Hindari kesalahan ejaan, tanda baca, dan kalimat yang kurang efektif. Gunakan bahasa ilmiah yang baik dan konsisten.",
-      2: "Catatan kedua ini sama pentingnya, pastikan kamu memperhatikan detail kecil dari format penulisan dan kesesuaian isi dengan topik.",
-      3: "Catatan ketiga menekankan pentingnya struktur logika yang konsisten dan penggunaan kutipan atau referensi yang sesuai."
-    };
-
-    document.querySelectorAll('.clickable-note').forEach(card => {
-      card.addEventListener('click', () => {
-        const id = card.getAttribute('data-id');
-        document.getElementById('popupText').innerText = catatanList[id];
-        document.getElementById('popupOverlay').style.display = 'flex';
+      Swal.fire({
+          title: 'Berhasil!',
+          text: 'Dokumen Anda telah berhasil diunggah.',
+          icon: 'success',
+          confirmButtonColor: '#007bff'
       });
-    });
-
-    function closePopup() {
-      document.getElementById('popupOverlay').style.display = 'none';
-    }
   </script>
+  <?php endif; ?>
+  
 </body>
 </html>
