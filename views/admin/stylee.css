@@ -101,7 +101,7 @@ body {
 }
 
 .card-comment {
-  background-color: #F2F2F2;
+  background-color: #e96fc2;
   padding: 20px;
   border-radius: 15px;
   margin-bottom: 20px;
@@ -111,7 +111,7 @@ body {
 }
 
 .card-comment:hover {
-  background-color: #ffffff;
+  background-color: #007bff;
   color: #fff;
 }
 
@@ -119,12 +119,7 @@ body {
   color: #fff; /* Pastikan teks strong juga ikut putih saat hover */
 }
 
-.text-truncate-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
+
 
 /* =================================
    Tombol Kirim
